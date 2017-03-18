@@ -54,7 +54,8 @@ def getAnimesGen(url):
 		
 		try :
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				addDir('Próxima Página >>', base + proxima, 30, artfolder + 'proxpag.jpg')
+				pagina = proxima[-1:]
+				addDir('Página '+pagina+' >>', base + proxima, 30, artfolder + 'proxpag.jpg')
 		except :
 				pass
 
@@ -68,14 +69,15 @@ def getLancamentos(url):
 		totE = len(episodios)
 
 		for episodio in episodios:
-				titE = episodio.a.img["alt"].encode('utf-8', 'ignore')
+				titE = episodio.a.img["title"].encode('utf-8', 'ignore')
 				urlE = base + episodio.a["href"]
 				imgE = base + episodio.a.img["src"]
 				addDir(titE, urlE, 100, imgE, False, totE, '')
 		
 		try :
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				addDir('Próxima Página >>', base + proxima, 20, artfolder + 'proxpag.jpg')
+				pagina = proxima[-1:]
+				addDir('Página '+pagina+' >>', base + proxima, 20, artfolder + 'proxpag.jpg')
 
 		except :
 				pass
@@ -97,7 +99,8 @@ def getLegendados(url):
 		
 		try :
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				addDir('Próxima Página >>', base + proxima, 30, artfolder + 'proxpag.jpg')
+				pagina = proxima[-1:]
+				addDir('Página '+pagina+' >>', base + proxima, 30, artfolder + 'proxpag.jpg')
 		except :
 				pass
 
@@ -122,7 +125,8 @@ def getEpsLegendados(url):
 				
 		try :
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				addDir('Próxima Página >>', base + proxima, 22, artfolder + 'proxpag.jpg')
+				pagina = proxima[-1:]
+				addDir('Página '+pagina+' >>', base + proxima, 22, artfolder + 'proxpag.jpg')
 		except :
 				pass
 
@@ -234,13 +238,13 @@ try    : iconimage=urllib.unquote_plus(params["iconimage"])
 except : pass
 
 if   mode == None : menuPrincipal()
-elif mode == 10   :	getGeneros(url)
-elif mode == 11   :	getAnimesGen(url)
-elif mode == 20   :	getLancamentos(url)
-elif mode == 30   :	getLegendados(url)
-elif mode == 31   :	getEpsLegendados(url)
+elif mode == 10   : getGeneros(url)
+elif mode == 11   : getAnimesGen(url)
+elif mode == 20   : getLancamentos(url)
+elif mode == 30   : getLegendados(url)
+elif mode == 31   : getEpsLegendados(url)
 elif mode == 99   : doPesquisa()
-elif mode == 100  :	doPlay(url, name, iconimage)
+elif mode == 100  : doPlay(url, name, iconimage)
 
 xbmcplugin.setContent(int(sys.argv[1]), 'movies')
 xbmc.executebuiltin('Container.SetViewMode(51)')
