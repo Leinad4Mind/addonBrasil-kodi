@@ -53,9 +53,15 @@ def getAnimesGen(url):
 				addDir(titA, urlA, 31, imgA, True, totA, '')
 		
 		try :
+				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				pagina = proxima[-1:]
-				addDir('Página '+pagina+' >>', base + proxima, 30, artfolder + 'proxpag.jpg')
+				ultima = re.findall('href="(.*?)">Último</a></li>', link)[0]
+				pp = re.findall('([0-9]+?)$', proxima)[0]
+				pa = re.findall('([0-9]+?)$', anterior)[0]
+				pu = re.findall('([0-9]+?)$', ultima)[0]
+				addDir('Página Seguinte '+pp+' >>', base + proxima, 30, artfolder + 'proxpag.jpg')
+				addDir('<< Página Anterior '+pa, base + anterior, 30, artfolder + 'proxpag.jpg')
+				addDir('Última Página '+pu+' >>', base + ultima, 30, artfolder + 'proxpag.jpg')
 		except :
 				pass
 
@@ -75,9 +81,15 @@ def getLancamentos(url):
 				addDir(titE, urlE, 100, imgE, False, totE, '')
 		
 		try :
+				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				pagina = proxima[-1:]
-				addDir('Página '+pagina+' >>', base + proxima, 20, artfolder + 'proxpag.jpg')
+				ultima = re.findall('href="(.*?)">Último</a></li>', link)[0]
+				pp = re.findall('([0-9]+?)$', proxima)[0]
+				pa = re.findall('([0-9]+?)$', anterior)[0]
+				pu = re.findall('([0-9]+?)$', ultima)[0]
+				addDir('Página Seguinte '+pp+' >>', base + proxima, 20, artfolder + 'proxpag.jpg')
+				addDir('<< Página Anterior '+pa, base + anterior, 20, artfolder + 'proxpag.jpg')
+				addDir('Última Página '+pu+' >>', base + ultima, 20, artfolder + 'proxpag.jpg')
 
 		except :
 				pass
@@ -98,9 +110,15 @@ def getLegendados(url):
 				addDir(titA, urlA, 31, imgA, True, totA, '')
 		
 		try :
+				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				pagina = proxima[-1:]
-				addDir('Página '+pagina+' >>', base + proxima, 30, artfolder + 'proxpag.jpg')
+				ultima = re.findall('href="(.*?)">Último</a></li>', link)[0]
+				pp = re.findall('([0-9]+?)$', proxima)[0]
+				pa = re.findall('([0-9]+?)$', anterior)[0]
+				pu = re.findall('([0-9]+?)$', ultima)[0]
+				addDir('Página Seguinte '+pp+' >>', base + proxima, 30, artfolder + 'proxpag.jpg')
+				addDir('<< Página Anterior '+pa, base + anterior, 30, artfolder + 'proxpag.jpg')
+				addDir('Última Página '+pu+' >>', base + ultima, 30, artfolder + 'proxpag.jpg')
 		except :
 				pass
 
@@ -124,9 +142,15 @@ def getEpsLegendados(url):
 						pass
 				
 		try :
+				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				pagina = proxima[-1:]
-				addDir('Página '+pagina+' >>', base + proxima, 22, artfolder + 'proxpag.jpg')
+				ultima = re.findall('href="(.*?)">Último</a></li>', link)[0]
+				pp = re.findall('([0-9]+?)$', proxima)[0]
+				pa = re.findall('([0-9]+?)$', anterior)[0]
+				pu = re.findall('([0-9]+?)$', ultima)[0]
+				addDir('Página Seguinte '+pp+' >>', base + proxima, 22, artfolder + 'proxpag.jpg')
+				addDir('<< Página Anterior '+pa, base + anterior, 22, artfolder + 'proxpag.jpg')
+				addDir('Última Página '+pu+' >>', base + ultima, 22, artfolder + 'proxpag.jpg')
 		except :
 				pass
 
