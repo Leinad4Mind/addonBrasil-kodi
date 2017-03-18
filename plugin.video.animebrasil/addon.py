@@ -20,6 +20,8 @@ def menuPrincipal():
 		addDir2('Gêneros'    , base + '/genero'            , 10, artfolder + 'categorias.jpg')
 		addDir2('Lançamentos', base + '/animes-lancamentos', 20, artfolder + 'recentes.jpg')
 		addDir2('Legendados' , base + '/anime'             , 30, artfolder + 'comentados.jpg')
+		addDir2('Dublados'   , base + '/animes-dublado'    , 30, artfolder + 'comentados.jpg')
+		addDir2('Tokusatsu'  , base + '/tokusatsu'         , 30, artfolder + 'comentados.jpg')
 		addDir2('Pesquisa'   , base                        , 99, artfolder + 'pesquisa.jpg')
 
 def getGeneros(url):
@@ -38,32 +40,41 @@ def getGeneros(url):
 		
 def getAnimesGen(url):
 		link  = openURL(url)
-		link  = unicode(link, 'latin', errors='ignore')
+		link  = unicode(link, 'latin', 'ignore')
+		link  = link.encode('ascii', 'ignore')
 
 		urlsA = re.findall('<h2 class="go"><a class="internalUrl" href="(.*?)" title="(.*?)" rel="bookmark" itemprop="name">', link)
 		imgsA = re.findall('<img class="img-responsive" alt=".*?" title=".*?" src="(.*?)" itemprop="image">', link)
 
 		totA  = len(imgsA)
 
-		for i in range(totA):
-				titA = urlsA[i][1].encode('ascII', 'ignore')
-				urlA = base + urlsA[i][0]
-				imgA = imgsA[i]
-		
-				addDir(titA, urlA, 31, imgA, True, totA, '')
-		
 		try :
+				primeira = re.findall('href="(.*?)">Primeiro</a></li>', link)[0]
 				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
-				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				ultima = re.findall('href="(.*?)">Último</a></li>', link)[0]
-				pp = re.findall('([0-9]+?)$', proxima)[0]
 				pa = re.findall('([0-9]+?)$', anterior)[0]
-				pu = re.findall('([0-9]+?)$', ultima)[0]
-				addDir('Página Seguinte '+pp+' >>', base + proxima, 30, artfolder + 'proxpag.jpg')
-				addDir('<< Página Anterior '+pa, base + anterior, 30, artfolder + 'proxpag.jpg')
-				addDir('Última Página '+pu+' >>', base + ultima, 30, artfolder + 'proxpag.jpg')
+				pd = re.findall('([0-9]+?)$', primeira)[0]
+				if (pa != '1'): addDir('. Primeira Página', base + primeira, 11, artfolder + 'proxpag.jpg')
+				if (pa != '1'): addDir('<< Página Anterior '+pa, base + anterior, 11, artfolder + 'proxpag.jpg')
 		except :
 				pass
+
+		for i in range(totA):
+				titA = urlsA[i][1].encode('ascii', 'ignore')
+				urlA = base + urlsA[i][0]
+				imgA = base + imgsA[i]
+
+				addDir(titA, urlA, 31, imgA, True, totA, '')
+
+		try :
+				proxima = re.findall('href="(.*?)">Avanar</a></li>', link)[0]
+				ultima = re.findall('href="(.*?)">ltimo</a></li>', link)[0]
+				pp = re.findall('([0-9]+?)$', proxima)[0]
+				pu = re.findall('([0-9]+?)$', ultima)[0]
+				addDir('Página Seguinte '+pp+' >>', base + proxima, 11, artfolder + 'proxpag.jpg')
+				addDir('Última Página '+pu+' >>', base + ultima, 11, artfolder + 'proxpag.jpg')
+		except :
+				pass
+		xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def getLancamentos(url):
 		link = openURL(url)
@@ -74,6 +85,17 @@ def getLancamentos(url):
 
 		totE = len(episodios)
 
+		try :
+				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
+				primeira = re.findall('href="(.*?)">Primeiro</a></li>', link)[0]
+				
+				pa = re.findall('([0-9]+?)$', anterior)[0]
+				pd = re.findall('([0-9]+?)$', primeira)[0]
+				if (pa != '1'): addDir('. Primeira Página', base + primeira, 20, artfolder + 'proxpag.jpg')
+				if (pa != '1'): addDir('<< Página Anterior '+pa, base + anterior, 20, artfolder + 'proxpag.jpg')
+		except :
+				pass
+
 		for episodio in episodios:
 				titE = episodio.a.img["title"].encode('utf-8', 'ignore')
 				urlE = base + episodio.a["href"]
@@ -81,46 +103,54 @@ def getLancamentos(url):
 				addDir(titE, urlE, 100, imgE, False, totE, '')
 		
 		try :
-				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
 				ultima = re.findall('href="(.*?)">Último</a></li>', link)[0]
 				pp = re.findall('([0-9]+?)$', proxima)[0]
-				pa = re.findall('([0-9]+?)$', anterior)[0]
 				pu = re.findall('([0-9]+?)$', ultima)[0]
 				addDir('Página Seguinte '+pp+' >>', base + proxima, 20, artfolder + 'proxpag.jpg')
-				addDir('<< Página Anterior '+pa, base + anterior, 20, artfolder + 'proxpag.jpg')
 				addDir('Última Página '+pu+' >>', base + ultima, 20, artfolder + 'proxpag.jpg')
-
 		except :
 				pass
+		xbmc.executebuiltin('Container.SetViewMode(51)')
 
 def getLegendados(url):
 		link  = openURL(url)
 		link  = unicode(link, 'latin', 'ignore')
+		link  = link.encode('ascii', 'ignore')
+
 		urlsA = re.findall('<h2 class="go"><a class="internalUrl" href="(.*?)" title="(.*?)" rel="bookmark" itemprop="name">', link)
 		imgsA = re.findall('<img class="img-responsive" alt=".*?" title=".*?" src="(.*?)" itemprop="image">', link)
 
 		totA  = len(imgsA)
 
+		try :
+				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
+				primeira = re.findall('href="(.*?)">Primeiro</a></li>', link)[0]
+				
+				pa = re.findall('([0-9]+?)$', anterior)[0]
+				pd = re.findall('([0-9]+?)$', primeira)[0]
+				if (pa != '1'): addDir('. Primeira Página', base + primeira, 30, artfolder + 'proxpag.jpg')
+				if (pa != '1'): addDir('<< Página Anterior '+pa, base + anterior, 30, artfolder + 'proxpag.jpg')
+		except :
+				pass
+
 		for i in range(totA):
 				titA = urlsA[i][1].encode('ascii', 'ignore')
 				urlA = base + urlsA[i][0]
-				imgA = imgsA[i]
+				imgA = base + imgsA[i]
 		
 				addDir(titA, urlA, 31, imgA, True, totA, '')
 		
 		try :
-				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
-				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
-				ultima = re.findall('href="(.*?)">Último</a></li>', link)[0]
+				proxima = re.findall('href="(.*?)">Avanar</a></li>', link)[0]
+				ultima = re.findall('href="(.*?)">ltimo</a></li>', link)[0]
 				pp = re.findall('([0-9]+?)$', proxima)[0]
-				pa = re.findall('([0-9]+?)$', anterior)[0]
 				pu = re.findall('([0-9]+?)$', ultima)[0]
 				addDir('Página Seguinte '+pp+' >>', base + proxima, 30, artfolder + 'proxpag.jpg')
-				addDir('<< Página Anterior '+pa, base + anterior, 30, artfolder + 'proxpag.jpg')
 				addDir('Última Página '+pu+' >>', base + ultima, 30, artfolder + 'proxpag.jpg')
 		except :
 				pass
+		xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def getEpsLegendados(url):
 		link = openURL(url)
@@ -132,6 +162,17 @@ def getEpsLegendados(url):
 
 		totE = len(eps)
 
+		try :
+				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
+				primeira = re.findall('href="(.*?)">Primeiro</a></li>', link)[0]
+				
+				pa = re.findall('([0-9]+?)$', anterior)[0]
+				pd = re.findall('([0-9]+?)$', primeira)[0]
+				if (pa != '1'): addDir('. Primeira Página', base + primeira, 22, artfolder + 'proxpag.jpg')
+				if (pa != '1'): addDir('<< Página Anterior '+pa, base + anterior, 22, artfolder + 'proxpag.jpg')
+		except :
+				pass
+
 		for ep in eps:
 				try :
 						titE = ep.img["title"].encode('ascii', 'ignore')
@@ -142,14 +183,11 @@ def getEpsLegendados(url):
 						pass
 				
 		try :
-				anterior = re.findall('href="(.*?)">Voltar</a></li>', link)[0]
 				proxima = re.findall('href="(.*?)">Avançar</a></li>', link)[0]
 				ultima = re.findall('href="(.*?)">Último</a></li>', link)[0]
 				pp = re.findall('([0-9]+?)$', proxima)[0]
-				pa = re.findall('([0-9]+?)$', anterior)[0]
 				pu = re.findall('([0-9]+?)$', ultima)[0]
 				addDir('Página Seguinte '+pp+' >>', base + proxima, 22, artfolder + 'proxpag.jpg')
-				addDir('<< Página Anterior '+pa, base + anterior, 22, artfolder + 'proxpag.jpg')
 				addDir('Última Página '+pu+' >>', base + ultima, 22, artfolder + 'proxpag.jpg')
 		except :
 				pass
@@ -271,5 +309,4 @@ elif mode == 99   : doPesquisa()
 elif mode == 100  : doPlay(url, name, iconimage)
 
 xbmcplugin.setContent(int(sys.argv[1]), 'movies')
-xbmc.executebuiltin('Container.SetViewMode(51)')
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
